@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
-import {LMap, LTileLayer, LMarker, LControlZoom} from 'vue2-leaflet'
-import { Icon } from 'leaflet'
+import {LMap, LTileLayer, LMarker, LPopup} from 'vue2-leaflet'
+import { Icon, CRS } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 
 
