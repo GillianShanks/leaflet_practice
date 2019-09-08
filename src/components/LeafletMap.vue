@@ -1,6 +1,6 @@
 <template lang="html">
   <div id="mapid">
-    <l-map @click="handleMapClick" ref="myMap" :minZoom="minZoom" :maxZoom="maxZoom" :crs="crs">
+    <l-map @click="handleMapClick" ref="myMap" :minZoom="minZoom" :maxZoom="maxZoom" :max-bounds="maxBounds" :crs="crs">
 
       <l-image-overlay :url="url" :bounds="bounds"/>
 
@@ -28,7 +28,7 @@ export default {
     return {
       url: "http://localhost:8080/img/solar-system.207dccd8.jpg",
       bounds:[[-400, 0], [0, 1100]],
-      minZoom: -10,
+      minZoom: 0,
       maxZoom: 4,
       crs: CRS.Simple,
       planets:[
@@ -43,12 +43,14 @@ export default {
         {name: "Neptune", lat:-200, lng: 990},
       ],
       mapx: null,
-      mapy: null
+      mapy: null,
+      maxBounds:[[-400, 0], [0, 1100]],
     }
   },
   mounted () {
       // this.$refs.myMap.mapObject.setView([0,0], 0);
       this.$refs.myMap.mapObject.fitBounds(this.bounds);
+      this.$refs.myMap.mapObject.maxBoundsViscosity(1);
   },
   methods:{
     handleMapClick(e){
@@ -64,12 +66,17 @@ export default {
       this.mapx =x * imageWidth/mapWidth;
       this.mapy =y * imageHeight/mapHeight;
 
-      console.log(x, y);
+      console.log(this.mapx, this.mapy);
     }
   }
 }
 </script>
 
+<style>
+  body{
+    background-color: black;
+  }
+</style>
 <style lang="css" scoped>
 /* @import "../node_modules/leaflet/dist/leaflet.css"; */
 
@@ -80,8 +87,12 @@ export default {
   background-image: url('../node_modules/leaflet/dist/images/marker-shadow.png');
 } */
 
+
 #mapid {
   height: 400px;
   width: 1100px;
+}
+.leaflet-container {
+    background-color:rgba(255,0,0,0.0);
 }
 </style>
