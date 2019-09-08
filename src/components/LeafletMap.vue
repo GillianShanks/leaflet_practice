@@ -1,10 +1,10 @@
 <template lang="html">
   <div id="mapid">
-    <l-map ref="myMap" :minZoom="minZoom" :maxZoom="maxZoom" :crs="crs">
+    <l-map @click="handleMapClick" ref="myMap" :minZoom="minZoom" :maxZoom="maxZoom" :crs="crs">
 
       <l-image-overlay :url="url" :bounds="bounds"/>
 
-      <l-marker v-for="planet in planets" :lat-lng="plant" :key="planet.name">
+      <l-marker v-for="planet in planets" :lat-lng="planet" :key="planet.name">
         <l-popup :content="planet.name" />
       </l-marker>
 
@@ -27,18 +27,45 @@ export default {
   data(){
     return {
       url: "http://localhost:8080/img/solar-system.207dccd8.jpg",
-      bounds:[[0, 0], [100, 100]],
-      minZoom: 0,
-      maxZoom: 0,
+      bounds:[[-400, 0], [0, 1100]],
+      minZoom: -10,
+      maxZoom: 4,
       crs: CRS.Simple,
       planets:[
-        {name: "Sun", lng: 0, lat:0}
-        // {name: "Mercury", lng: 41.6, lat: 130.1 }
-      ]
+        {name: "Sun", lat:-200, lng: 35},
+        {name: "Mercury", lat:-200, lng: 125},
+        {name: "Venus", lat:-200, lng: 185},
+        {name: "Earth", lat:-200, lng: 265},
+        {name: "Mars", lat:-200, lng: 350},
+        {name: "Jupiter", lat:-200, lng: 500},
+        {name: "Saturn", lat:-200, lng: 680},
+        {name: "Uranus", lat:-200, lng: 860},
+        {name: "Neptune", lat:-200, lng: 990},
+      ],
+      mapx: null,
+      mapy: null
     }
   },
   mounted () {
-      this.$refs.myMap.mapObject.setView([0,0], 0);
+      // this.$refs.myMap.mapObject.setView([0,0], 0);
+      this.$refs.myMap.mapObject.fitBounds(this.bounds);
+  },
+  methods:{
+    handleMapClick(e){
+      let x=e.containerPoint.x
+      let y=e.containerPoint.y
+
+      let imageWidth =1280
+      let imageHeight =426
+
+      let mapHeight = this.$refs.myMap.mapObject._container.offsetHeight
+      let mapWidth = this.$refs.myMap.mapObject._container.offsetWidth
+
+      this.mapx =x * imageWidth/mapWidth;
+      this.mapy =y * imageHeight/mapHeight;
+
+      console.log(x, y);
+    }
   }
 }
 </script>
@@ -54,7 +81,7 @@ export default {
 } */
 
 #mapid {
-  height: 50vh;
-  width: 90vw;
+  height: 400px;
+  width: 1100px;
 }
 </style>
